@@ -1,0 +1,127 @@
+/**
+*
+* Tutorial component which takes a text and displays it as a span HTML element.
+*
+* @class
+* @extends Biojs
+*
+* @author <a href="mailto:MyEmail@my.email">My Name</a>
+* @version 1.0.0
+* @category 0
+*
+* @requires <a href='http://code.jquery.com/jquery-1.7.2.min.js/'>jQuery Core 1.7.2</a>
+* @dependency <script language="JavaScript" type="text/javascript" src="../biojs/dependencies/jquery/jquery-1.7.2.min.js"></script>
+*
+* @param {Object} options An object with the options for this component.
+*
+* @option {string} target
+*    Identifier of the DIV tag where the component should be displayed.
+*
+* @option {string} [text="Hello!"]
+*    String to be displayed by the component.
+*
+* @example
+* var instance = new Biojs.MyHelloWorld({
+*    target: "YourOwnDivId",
+*    text: 'Hello to my world!'
+* });
+*
+*/
+Biojs.MyHelloWorld = Biojs.extend (
+/** @lends Biojs.MyHelloWorld# */
+{
+    /**
+    * Constructor to initialize the component
+    * @name Biojs.MyHelloWorld-constructor
+    */
+    constructor: function (options) {
+        // In JavaScript 'this' always refers to the 'owner' of the function
+        // we're executing (http://www.quirksmode.org/js/this.html)
+        // Let's preserve the reference to 'this' through the variable self. In
+        //this way, we can invoke/execute
+        // our component instead of the object where 'this' is being
+        // invoked/executed.
+        var self = this;
+
+        // For practical use, create an object with the main DIV container
+        // to be used in all of the code of our component
+        this._container = jQuery("#"+self.opt.target);
+    
+        //Move the options to your model
+        this.setText(options.text);
+
+        //display the model, i.e., text
+        this.displayText();
+    
+    },
+
+    /**
+    *  Default values for the options
+    *  @name Biojs.MyHelloWorld-opt
+    */
+    opt: {
+        target: "YourOwnDivId"
+    },
+
+    /**
+    * Array containing the supported event names
+    * @name Biojs.MyHelloWorld-eventTypes
+    */
+    eventTypes: [
+        
+        /**
+        * @name Biojs.MyHelloWorld#onTextDisplayed
+        * @event
+        * @param {function} actionPerformed A function which receives a {@link Biojs.Event} object as argument.
+        * @eventData {Object} source The component which triggered the event.
+        * @example
+        * instance.onTextDisplayed(
+        *    function( obj ) {
+        *       alert(obj);
+        *    }
+        * );
+        *
+        * */
+        "onTextDisplayed"
+        
+    ],
+
+    _text: "",
+    
+
+    _container: undefined,
+    
+
+    
+    //public methods
+    /**
+    * Getter for the text,
+    *
+    * @example
+    * instance.getText();
+    */
+    getText: function() {
+        return this._text;
+    },
+
+    /**
+     * Setter for the text,
+     * @param {string} text Input text.
+     * @example
+     * instance.setText("A refreshed hello world!");
+     */
+    setText: function(text) {
+        this._text = text;
+    },
+
+    /**
+     * Displays the text in a span HTML element,
+     * @example
+     * instance.displayText();
+     */
+    displayText: function() {
+        this._container.html('<span>' + this.getText() + '</span>');
+        this.raiseEvent("onTextDisplayed", this.getText());
+    }
+    
+});
